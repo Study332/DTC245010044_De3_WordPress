@@ -1,11 +1,13 @@
-# Minh chứng khi chạy trên máy triển khai
+# Minh chứng runtime và cấu hình
 
-Lưu ảnh chụp thực tế tại đây sau khi khởi chạy stack. Không đưa mật khẩu, token, khóa riêng hoặc dữ liệu cá nhân vào ảnh.
+Các ảnh dưới đây được chụp từ giao diện thật của dịch vụ đang chạy. Chúng cũng đã được chèn vào các mục tương ứng trong `Bao_cao_De_3_WordPress.docx`.
 
-1. `01-website-https.png` — trang chủ Nương có ba sản phẩm.
-2. `02-compose-ps.png` — trạng thái dịch vụ sau khi khởi động.
-3. `03-prometheus-targets.png` — các scrape target ở trạng thái `UP`.
-4. `04-grafana-dashboard.png` — dashboard có số liệu metrics.
-5. `05-grafana-logql.png` — một truy vấn LogQL trả về log.
-6. `06-phpmyadmin.png` — database WordPress và các bảng.
-7. `07-github-commits.png` — repository và ba commit yêu cầu.
+- `02-github-repo.jpg` — repository GitHub của dự án (Hình 2.1).
+- `03-nginx-https-config.jpg` — cấu hình Reverse Proxy HTTPS và security headers Nginx (Hình 3.1).
+- `04-prometheus-targets.jpg` — năm job scrape đều UP: bốn exporter và Prometheus tự giám sát (Hình 4.1).
+- `05-website-products.jpg` — website Nương với các sản phẩm cà phê (Hình 2.2).
+- `06-grafana-dashboard.jpg` — dashboard metrics CPU/RAM, Nginx và MySQL (Hình 4.2).
+- `07-grafana-logql.jpg` — LogQL trong Grafana Explore trả về Docker logs (Hình 4.3).
+- `08-phpmyadmin-database.jpg` — database `wordpress_db` và 12 bảng WordPress (Hình 2.3).
+
+Kiến trúc Docker tổng thể được trình bày bằng sơ đồ trong báo cáo (Hình 1.1).

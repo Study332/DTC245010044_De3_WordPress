@@ -12,7 +12,7 @@
       "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
       "id": 1,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
-      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (name) (rate(container_cpu_usage_seconds_total{name=~\"/wp_.*\"}[5m]))", "legendFormat": "{{name}}", "refId": "A"}],
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (name) (rate(container_cpu_usage_seconds_total{name=~\"wp_.*\"}[5m]))", "legendFormat": "{{name}}", "refId": "A"}],
       "title": "CPU · Docker services",
       "type": "timeseries"
     },
@@ -22,7 +22,7 @@
       "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
       "id": 2,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
-      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (name) (container_memory_working_set_bytes{name=~\"/wp_.*\"})", "legendFormat": "{{name}}", "refId": "A"}],
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (name) (container_memory_working_set_bytes{name=~\"wp_.*\"})", "legendFormat": "{{name}}", "refId": "A"}],
       "title": "Memory · Docker services",
       "type": "timeseries"
     },
