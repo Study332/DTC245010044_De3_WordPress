@@ -38,7 +38,7 @@ function moc_may_tea_leaf_icon($variant = 'cluster') {
 }
 
 function moc_may_assets() {
-    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.6.0');
+    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.7.0');
     wp_enqueue_script('moc-may-motion', get_template_directory_uri() . '/assets/js/motion.js', array(), '1.2.0', true);
 }
 add_action('wp_enqueue_scripts', 'moc_may_assets');
