@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-$brand_name = get_bloginfo('name') ?: 'Nương';
+$brand_name = get_bloginfo('name') ?: 'Trà Thái Nguyên';
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -17,8 +17,8 @@ $brand_name = get_bloginfo('name') ?: 'Nương';
 <header class="site-header">
     <div class="header-inner">
         <a class="brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php echo esc_attr($brand_name); ?> — trang chủ">
-            <span class="brand-mark" aria-hidden="true">N</span>
-            <span><span class="brand-name"><?php echo esc_html($brand_name); ?></span><span class="brand-caption">Cà phê từ vùng cao</span></span>
+            <span class="brand-mark" aria-hidden="true">T</span>
+            <span><span class="brand-name"><?php echo esc_html($brand_name); ?></span><span class="brand-caption">Chè từ Thái Nguyên</span></span>
         </a>
         <nav class="main-nav" aria-label="Điều hướng chính">
             <?php if (has_nav_menu('primary')) : ?>
@@ -26,7 +26,7 @@ $brand_name = get_bloginfo('name') ?: 'Nương';
             <?php else : ?>
                 <a href="<?php echo esc_url(home_url('/#san-pham')); ?>">Sản phẩm</a>
                 <a href="<?php echo esc_url(home_url('/#cau-chuyen')); ?>">Câu chuyện</a>
-                <a href="<?php echo esc_url(home_url('/#pha-ca-phe')); ?>">Cách pha</a>
+                <a href="<?php echo esc_url(home_url('/#pha-che')); ?>">Cách pha</a>
                 <a class="nav-cta" href="<?php echo esc_url(home_url('/#lien-he')); ?>">Liên hệ <span class="arrow" aria-hidden="true">↗</span></a>
             <?php endif; ?>
         </nav>

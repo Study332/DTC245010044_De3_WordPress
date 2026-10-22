@@ -1,5 +1,5 @@
 <?php
-/** Theme setup and the editable coffee product catalog. */
+/** Theme setup and the editable Thai Nguyen tea product catalog. */
 
 if (!defined('ABSPATH')) {
     exit;
@@ -22,9 +22,9 @@ add_action('wp_enqueue_scripts', 'moc_may_assets');
 function moc_may_register_products() {
     register_post_type('ca_phe', array(
         'labels' => array(
-            'name' => __('Sản phẩm cà phê', 'moc-may'),
+            'name' => __('Sản phẩm chè', 'moc-may'),
             'singular_name' => __('Sản phẩm', 'moc-may'),
-            'add_new_item' => __('Thêm sản phẩm cà phê', 'moc-may'),
+            'add_new_item' => __('Thêm sản phẩm chè', 'moc-may'),
             'edit_item' => __('Sửa sản phẩm', 'moc-may'),
             'menu_name' => __('Sản phẩm', 'moc-may'),
         ),
@@ -32,7 +32,7 @@ function moc_may_register_products() {
         'show_in_rest' => true,
         'has_archive' => true,
         'rewrite' => array('slug' => 'san-pham'),
-        'menu_icon' => 'dashicons-coffee',
+        'menu_icon' => 'dashicons-leaf',
         'supports' => array('title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'),
     ));
 }
@@ -47,7 +47,7 @@ function moc_may_product_details_box($post) {
     wp_nonce_field('moc_may_save_product_details', 'moc_may_product_nonce');
     $fields = array(
         '_moc_price' => __('Giá bán (ví dụ: 185.000đ)', 'moc-may'),
-        '_moc_origin' => __('Vùng trồng', 'moc-may'),
+        '_moc_origin' => __('Vùng chè', 'moc-may'),
         '_moc_note' => __('Ghi chú ngắn / hương vị', 'moc-may'),
         '_moc_badge' => __('Nhãn nổi bật', 'moc-may'),
     );

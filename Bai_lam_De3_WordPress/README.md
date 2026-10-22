@@ -5,7 +5,7 @@
 
 ## Mục tiêu và sản phẩm
 
-Triển khai website WordPress tiếng Việt giới thiệu thương hiệu cà phê đặc sản Việt Nam **Nương**. Trang chủ có nội dung thương hiệu, danh mục sản phẩm, câu chuyện nguồn gốc, hướng dẫn pha và liên hệ. Sản phẩm là loại nội dung riêng trong WordPress, có thể tạo và sửa từ trang quản trị; mỗi sản phẩm lưu giá, vùng trồng, hương vị và nhãn nổi bật. Ba sản phẩm mẫu được tạo tự động ở lần cài đặt đầu.
+Triển khai website WordPress tiếng Việt quảng bá chè Thái Nguyên. Trang chủ giới thiệu các dòng chè Móc Câu và Nõn Tôm ở Tân Cương, chè xanh La Bằng, câu chuyện vùng chè, cách pha và thông tin liên hệ. Sản phẩm được quản lý bằng loại nội dung riêng trong WordPress; mỗi sản phẩm có vùng chè, hương vị, nhãn và giá tham khảo. Ba sản phẩm mẫu được tạo tự động ở lần cài đặt đầu.
 
 ## Kiến trúc
 
@@ -92,7 +92,7 @@ Trình duyệt sẽ cảnh báo chứng chỉ HTTPS tự ký; đây là điều 
 
 ## Quản trị website
 
-Trong WordPress Admin, mở **Sản phẩm → Thêm sản phẩm cà phê**. Nhập tên, mô tả, tóm tắt; trong hộp **Thông tin sản phẩm**, điền giá, vùng trồng, ghi chú hương vị và nhãn. Sản phẩm đã publish sẽ xuất hiện trên trang chủ. Có thể đổi tên site trong **Settings → General**; logo chữ trên giao diện dùng tên site.
+Trong WordPress Admin, mở **Sản phẩm → Thêm sản phẩm chè**. Nhập tên, mô tả, tóm tắt; trong hộp **Thông tin sản phẩm**, điền giá tham khảo, vùng chè, ghi chú hương vị và nhãn. Sản phẩm đã publish sẽ xuất hiện trên trang chủ. Có thể đổi tên site trong **Settings → General**; logo chữ trên giao diện dùng tên site.
 
 Thông tin WordPress, MySQL và Grafana trong `.env` chỉ được áp dụng khi tạo dữ liệu lần đầu. Đổi giá trị trong `.env` sau khi cài đặt không tự đổi mật khẩu đã lưu trong MySQL/WordPress/Grafana; cần đổi mật khẩu trong từng dịch vụ hoặc tạo lại dữ liệu.
 
