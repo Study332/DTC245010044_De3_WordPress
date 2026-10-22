@@ -17,7 +17,7 @@ $brand_name = get_bloginfo('name') ?: 'Trà Thái Nguyên';
 <header class="site-header">
     <div class="header-inner">
         <a class="brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php echo esc_attr($brand_name); ?> — trang chủ">
-            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-mark" aria-hidden="true"><?php moc_may_tea_leaf_icon(); ?></span>
             <span><span class="brand-name"><?php echo esc_html($brand_name); ?></span><span class="brand-caption">Chè từ Thái Nguyên</span></span>
         </a>
         <nav class="main-nav" aria-label="Điều hướng chính">

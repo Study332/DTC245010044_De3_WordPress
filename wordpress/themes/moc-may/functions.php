@@ -14,8 +14,21 @@ function moc_may_setup() {
 }
 add_action('after_setup_theme', 'moc_may_setup');
 
+function moc_may_tea_leaf_icon() {
+    ?>
+    <svg class="tea-leaf-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <g class="tea-leaf-cluster">
+            <path class="tea-leaf-shape" d="M11.5 23.2C6.4 23.7 3.9 21.2 3.8 16.2c4.8-.4 8.5 1.1 9.7 4.3.3 1.2-.7 2.2-2 2.7Z" />
+            <path class="tea-leaf-shape" d="M17.2 16.6c-.1-4.7 2.3-8.1 7.4-9.2 1.2 4.7-.8 8.6-5.1 10-.9.1-1.7-.2-2.3-.8Z" />
+            <path class="tea-leaf-shape" d="M21.7 10.1c-3.9-1.9-4.7-4.9-2.7-7.7 4.5.8 7 3.5 6.2 6.5-.7 1.2-2.1 1.6-3.5 1.2Z" />
+            <path class="tea-leaf-vein" d="M7.2 26.8c4.2-4.3 10.4-11.5 17.6-21.1M12.7 21.1c-2.4-1.6-4.9-3.4-8-4.6m13.5.1c1.8-2.4 3.8-5.1 6-7.8m-2.5.8c-1.8-.8-3.5-2.1-4.9-4.1" />
+        </g>
+    </svg>
+    <?php
+}
+
 function moc_may_assets() {
-    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.4.0');
+    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.5.0');
     wp_enqueue_script('moc-may-motion', get_template_directory_uri() . '/assets/js/motion.js', array(), '1.2.0', true);
 }
 add_action('wp_enqueue_scripts', 'moc_may_assets');

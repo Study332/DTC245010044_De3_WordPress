@@ -33,7 +33,7 @@ $fallback_products = array(
                 <span class="hero-sun" aria-hidden="true"></span>
                 <span class="hero-leaf" aria-hidden="true"></span>
                 <div class="hero-pouch" aria-hidden="true">
-                    <span class="pouch-seal"></span>
+                    <span class="pouch-seal"><?php moc_may_tea_leaf_icon(); ?></span>
                     <span class="pouch-origin">Tân Cương · Thái Nguyên</span>
                     <span class="pouch-name">Chè Móc Câu<br>Tân Cương</span>
                     <span class="pouch-rule"></span>
@@ -76,7 +76,7 @@ $fallback_products = array(
                 ?>
                     <article class="product-card">
                         <a class="product-art product-art--<?php echo esc_attr($tone); ?>" href="<?php echo esc_url($url); ?>" aria-label="Xem <?php echo esc_attr($title); ?>">
-                            <span class="pack" aria-hidden="true"><span class="pouch-seal"></span><span class="pouch-origin"><?php echo esc_html($origin); ?></span><span class="pouch-name"><?php echo esc_html($pouch_title); ?></span><span class="pouch-rule"></span><span class="pouch-taste"><?php echo esc_html($badge); ?></span><span class="pouch-weight">Chè xanh · 100 g</span></span>
+                            <span class="pack" aria-hidden="true"><span class="pouch-seal"><?php moc_may_tea_leaf_icon(); ?></span><span class="pouch-origin"><?php echo esc_html($origin); ?></span><span class="pouch-name"><?php echo esc_html($pouch_title); ?></span><span class="pouch-rule"></span><span class="pouch-taste"><?php echo esc_html($badge); ?></span><span class="pouch-weight">Chè xanh · 100 g</span></span>
                             <span class="product-number">0<?php echo esc_html((string) ($index + 1)); ?> / 03</span>
                         </a>
                         <div class="product-info">
@@ -90,7 +90,7 @@ $fallback_products = array(
                 <?php if (empty($products)) : foreach ($fallback_products as $index => $product) : ?>
                     <article class="product-card">
                         <a class="product-art product-art--<?php echo esc_attr($product['tone']); ?>" href="#lien-he" aria-label="Tìm hiểu <?php echo esc_attr($product['title']); ?>">
-                            <span class="pack" aria-hidden="true"><span class="pouch-seal"></span><span class="pouch-origin"><?php echo esc_html($product['origin']); ?></span><span class="pouch-name"><?php echo esc_html($product['pouch']); ?></span><span class="pouch-rule"></span><span class="pouch-taste"><?php echo esc_html($product['taste']); ?></span><span class="pouch-weight">Chè xanh · 100 g</span></span>
+                            <span class="pack" aria-hidden="true"><span class="pouch-seal"><?php moc_may_tea_leaf_icon(); ?></span><span class="pouch-origin"><?php echo esc_html($product['origin']); ?></span><span class="pouch-name"><?php echo esc_html($product['pouch']); ?></span><span class="pouch-rule"></span><span class="pouch-taste"><?php echo esc_html($product['taste']); ?></span><span class="pouch-weight">Chè xanh · 100 g</span></span>
                             <span class="product-number">0<?php echo esc_html((string) ($index + 1)); ?> / 03</span>
                         </a>
                         <div class="product-info">
