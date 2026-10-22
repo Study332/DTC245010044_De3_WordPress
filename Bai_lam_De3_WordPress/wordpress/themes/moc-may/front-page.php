@@ -140,9 +140,10 @@ $fallback_products = array(
                     <li><span class="brew-step">04</span><span><strong>Rót trà ra chén</strong>Không ngâm lá quá lâu; điều chỉnh lần pha sau.</span><span class="brew-time">Thưởng thức</span></li>
                 </ol>
             </div>
-            <div class="brew-card" aria-label="Minh họa ấm trà xanh">
+            <div class="brew-card" aria-label="Minh họa các bước pha trà xanh">
                 <span class="brew-card-label">Gợi ý pha chè xanh</span>
-                <div class="brew-cup" aria-hidden="true"><span class="brew-steam"></span></div>
+                <span class="brew-pour" aria-hidden="true"></span>
+                <div class="brew-cup" aria-hidden="true"><span class="brew-liquid"></span><span class="brew-steam"></span></div>
                 <div class="brew-card-note"><span><strong>5 g : 150 ml</strong><br>Tỉ lệ tham khảo ban đầu</span><span>80–85°C</span></div>
             </div>
         </div>
