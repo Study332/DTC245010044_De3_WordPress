@@ -1,52 +1,122 @@
+name: nuong-wordpress
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   db:
     image: mysql:8.0
     container_name: wp_mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: wordpress_db
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: StrongUserPass@2026!
-      MYSQL_ROOT_PASSWORD: StrongRootPass@2026!
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Copy .env.example to .env first}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_EXPORTER_PASSWORD: ${MYSQL_EXPORTER_PASSWORD:?Set MYSQL_EXPORTER_PASSWORD in .env}
     volumes:
       - db_data:/var/lib/mysql
+      - ./mysql/init/10-create-exporter-user.sh:/docker-entrypoint-initdb.d/10-create-exporter-user.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     networks:
       - backend_net
+    mem_limit: 1g
+    cpus: 1.0
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:6.9.10-php8.3-apache
     container_name: wp_app
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_NAME: wordpress_db
-      WORDPRESS_DB_USER: wp_user
-      WORDPRESS_DB_PASSWORD: StrongUserPass@2026!
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', '${SITE_URL}');
+        define('WP_SITEURL', '${SITE_URL}');
+        define('FORCE_SSL_ADMIN', true);
+        if (!empty($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { $$_SERVER['HTTPS'] = 'on'; }
     volumes:
       - wp_data:/var/www/html
+      - ./wordpress/themes/moc-may:/usr/local/share/moc-may:ro
     networks:
       - frontend_net
       - backend_net
+    mem_limit: 768m
+    cpus: 1.0
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
+
+  wordpress-init:
+    image: wordpress:cli-php8.3
+    container_name: wp_site_initializer
+    restart: "no"
+    depends_on:
+      wordpress:
+        condition: service_started
+    user: "33:33"
+    entrypoint: ["/bin/sh", "/usr/local/bin/init-site.sh"]
+    environment:
+      SITE_URL: ${SITE_URL:?Set SITE_URL in .env}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:?Set WP_ADMIN_USER in .env}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?Set WP_ADMIN_PASSWORD in .env}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:?Set WP_ADMIN_EMAIL in .env}
+    volumes:
+      - wp_data:/var/www/html
+      - ./wordpress/themes/moc-may:/usr/local/share/moc-may:ro
+      - ./wordpress/init-site.sh:/usr/local/bin/init-site.sh:ro
+    networks:
+      - backend_net
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5.2-apache
     container_name: wp_phpmyadmin
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
-      - "8081:80"
+      - "127.0.0.1:8081:80"
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
     networks:
       - frontend_net
       - backend_net
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   nginx:
-    image: nginxinc/nginx-unprivileged:alpine
+    image: nginx/nginx-unprivileged:1.30.6-alpine
     container_name: wp_nginx
     restart: unless-stopped
     depends_on:
@@ -59,23 +129,44 @@ services:
       - ./nginx/certs:/etc/nginx/certs:ro
     networks:
       - frontend_net
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.15.0
     container_name: wp_prometheus
     restart: unless-stopped
     user: "65534:65534"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --web.enable-lifecycle
     ports:
-      - "9090:9090"
+      - "127.0.0.1:9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
     networks:
       - monitoring_net
+    mem_limit: 512m
+    cpus: 0.75
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:v0.60.6
     container_name: wp_cadvisor
     restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -83,57 +174,142 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - monitoring_net
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 128
+    logging: *default-logging
 
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.12.1
     container_name: wp_node_exporter
     restart: unless-stopped
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/host/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/rootfs:ro,rslave
     networks:
       - monitoring_net
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
+
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.17.2
+    container_name: wp_mysql_exporter
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - --mysqld.address=db:3306
+      - --mysqld.username=exporter
+      - --web.listen-address=:9104
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: ${MYSQL_EXPORTER_PASSWORD}
+    networks:
+      - backend_net
+      - monitoring_net
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.5.1
+    container_name: wp_nginx_exporter
+    restart: unless-stopped
+    command:
+      - --nginx.scrape-uri=http://nginx:8081/stub_status
+      - --web.listen-address=:9113
+    depends_on:
+      - nginx
+    networks:
+      - frontend_net
+      - monitoring_net
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   loki:
-    image: grafana/loki:2.9.2
+    image: grafana/loki:3.7.8
     container_name: wp_loki
     restart: unless-stopped
-    ports:
-      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki/loki-config.yml:/etc/loki/local-config.yaml:ro
-    command: -config.file=/etc/loki/local-config.yaml
+      - loki_data:/loki
     networks:
       - monitoring_net
+    mem_limit: 512m
+    cpus: 0.5
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   promtail:
-    image: grafana/promtail:2.9.2
+    image: grafana/promtail:3.6.7
     container_name: wp_promtail
     restart: unless-stopped
+    user: "0:0"
     volumes:
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - promtail_positions:/var/lib/promtail
     command: -config.file=/etc/promtail/config.yml
     networks:
       - monitoring_net
+    mem_limit: 256m
+    cpus: 0.25
+    pids_limit: 64
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:13.2.4
     container_name: wp_grafana
     restart: unless-stopped
     user: "472:472"
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=StrongGrafanaPass@2026!
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:?Set GRAFANA_ADMIN_USER in .env}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     networks:
       - monitoring_net
+    mem_limit: 512m
+    cpus: 0.5
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    logging: *default-logging
 
 volumes:
   db_data:
   wp_data:
   grafana_data:
+  prometheus_data:
+  loki_data:
+  promtail_positions:
 
 networks:
   frontend_net:

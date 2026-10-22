@@ -53,13 +53,13 @@ Các mạng Compose tách luồng truy cập: `frontend_net` nối proxy với �
 
 ## Cài đặt trên máy chạy Docker
 
-Yêu cầu Docker Engine và Docker Compose v2. Trên máy mới, tạo file cấu hình bí mật và thay toàn bộ giá trị mật khẩu mẫu bằng các mật khẩu khác nhau, dài và ngẫu nhiên:
+Yêu cầu Docker Engine và Docker Compose v2. Trên máy chạy demo local, sao chép mẫu cấu hình:
 
 ```bash
 cp .env.example .env
 ```
 
-Có thể sinh chuỗi mật khẩu ngẫu nhiên dạng hex bằng `openssl rand -hex 24`, sau đó dán riêng một chuỗi cho từng biến trong `.env`. Mật khẩu `MYSQL_EXPORTER_PASSWORD` nên giữ dạng chữ/số hex để tránh ký tự nháy đơn trong câu lệnh khởi tạo SQL. `.env` đã được loại khỏi Git.
+Tài khoản demo mặc định là `admin / admin123@` cho WordPress, phpMyAdmin và Grafana; MySQL root là `root / admin123@`. Đây là thông tin demo, chỉ dùng local. Trước khi mở hệ thống ra Internet, thay mật khẩu bằng các chuỗi ngẫu nhiên riêng trong `.env`. Mật khẩu `MYSQL_EXPORTER_PASSWORD` nên giữ dạng chữ/số hex để tránh ký tự nháy đơn trong câu lệnh khởi tạo SQL. File `.env` thật đã được loại khỏi Git.
 
 Chứng chỉ hiện tại dùng cho demo tại `localhost` và `127.0.0.1`. Nếu cần tạo lại chứng chỉ cho máy local:
 
@@ -67,7 +67,7 @@ Chứng chỉ hiện tại dùng cho demo tại `localhost` và `127.0.0.1`. N�
 ./scripts/generate-dev-cert.sh
 ```
 
-Script tạo chứng chỉ self-signed cho `localhost` và `127.0.0.1`. Chứng chỉ và khóa riêng được `.gitignore` loại khỏi Git; khóa demo có quyền đọc để tiến trình Nginx non-root trong container sử dụng. Chỉ dùng trong bài thực hành, không dùng cặp khóa này cho website công khai.
+Script tạo chứng chỉ self-signed cho `localhost` và `127.0.0.1` nếu cặp chứng chỉ chưa tồn tại. Khóa demo có quyền đọc để tiến trình Nginx non-root trong container sử dụng. Cặp khóa self-signed chỉ dành cho bài thực hành local, không dùng cho website công khai.
 
 Khởi chạy toàn bộ stack:
 
@@ -137,4 +137,4 @@ Lưu ảnh vào thư mục `minh-chung/` và thay phần ghi chú minh chứng t
 
 ## GitHub và lịch sử commit
 
-Thư mục bài làm nằm trong repository Git của dự án. Lịch sử hiện có ba commit theo các mốc: WordPress/MySQL và reverse proxy; Prometheus/Grafana; Loki/Promtail và hardening. Gói trong thư mục này được thêm thành commit riêng. Repository chưa có remote GitHub; trước khi nộp, tạo repository theo yêu cầu của giảng viên, thêm remote và push nhánh dự án. Không thêm `.env`, khóa TLS, dữ liệu trong volumes hoặc ảnh chụp có chứa mật khẩu.
+Repository được publish tại https://github.com/Study332/DTC245010044_De3_WordPress, nhánh `master`. Mẫu `.env.example` chứa mật khẩu demo công khai chỉ dành cho local; file `.env` thật, dữ liệu trong volumes và ảnh chụp có chứa mật khẩu không được commit.
