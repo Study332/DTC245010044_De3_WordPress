@@ -75,6 +75,10 @@ services:
     user: "33:33"
     entrypoint: ["/bin/sh", "/usr/local/bin/init-site.sh"]
     environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       SITE_URL: ${SITE_URL:?Set SITE_URL in .env}
       WP_ADMIN_USER: ${WP_ADMIN_USER:?Set WP_ADMIN_USER in .env}
       WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?Set WP_ADMIN_PASSWORD in .env}
