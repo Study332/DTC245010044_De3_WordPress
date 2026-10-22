@@ -1,5 +1,55 @@
 (() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const header = document.querySelector('.site-header');
+  const root = document.documentElement;
+
+  if (header) {
+    let scrollFrame = 0;
+    const updateScrollState = () => {
+      scrollFrame = 0;
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+      const scrollableDistance = root.scrollHeight - window.innerHeight;
+      const progress = scrollableDistance > 0 ? Math.min(100, (window.scrollY / scrollableDistance) * 100) : 0;
+      root.style.setProperty('--scroll-progress', `${progress}%`);
+    };
+    const requestScrollUpdate = () => {
+      if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollState);
+    };
+    window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+    window.addEventListener('resize', requestScrollUpdate, { passive: true });
+    updateScrollState();
+  }
+
+  if (!reduceMotion) {
+    const hero = document.querySelector('.hero-visual');
+    if (hero && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const layers = [
+        [hero.querySelector('.hero-sun'), 3],
+        [hero.querySelector('.hero-leaf'), -5],
+        [hero.querySelector('.hero-pouch'), 9],
+        [hero.querySelector('.hero-sticker'), 14],
+      ].filter(([element]) => element);
+
+      hero.addEventListener('pointermove', (event) => {
+        const bounds = hero.getBoundingClientRect();
+        const horizontal = (event.clientX - bounds.left) / bounds.width - 0.5;
+        const vertical = (event.clientY - bounds.top) / bounds.height - 0.5;
+        layers.forEach(([element, depth]) => {
+          element.style.setProperty('--parallax-x', `${(horizontal * depth).toFixed(1)}px`);
+          element.style.setProperty('--parallax-y', `${(vertical * depth).toFixed(1)}px`);
+        });
+      }, { passive: true });
+
+      hero.addEventListener('pointerleave', () => {
+        layers.forEach(([element]) => {
+          element.style.setProperty('--parallax-x', '0px');
+          element.style.setProperty('--parallax-y', '0px');
+        });
+      }, { passive: true });
+    }
+  }
+
+  if (reduceMotion) return;
 
   const revealGroups = [
     ['.trust-item', 70],
@@ -20,9 +70,13 @@
     });
   });
 
-  if (!targets.length || !('IntersectionObserver' in window)) return;
+  if (!targets.length) return;
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach((element) => element.classList.add('is-visible'));
+    return;
+  }
 
-  document.documentElement.classList.add('motion-ready');
+  root.classList.add('motion-ready');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;

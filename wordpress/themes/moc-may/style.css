@@ -3,7 +3,7 @@ Theme Name: Moc May Product Showcase
 Theme URI: https://localhost
 Author: ICTU
 Description: Giao diện tiếng Việt quảng bá chè Thái Nguyên.
-Version: 1.1.0
+Version: 1.2.0
 Requires at least: 6.0
 Requires PHP: 8.0
 Text Domain: moc-may
@@ -25,14 +25,17 @@ Text Domain: moc-may
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); font-size: 16px; line-height: 1.65; }
 img { max-width: 100%; height: auto; }
 a { color: inherit; }
 button, input, textarea { font: inherit; }
 .skip-link { position: absolute; left: 1rem; top: -5rem; z-index: 10; padding: .7rem 1rem; background: var(--white); }
 .skip-link:focus { top: 1rem; }
-.site-header { position: relative; z-index: 2; background: var(--paper); }
+.site-header { position: sticky; top: 0; z-index: 20; background: var(--paper); transition: background-color .28s ease, box-shadow .28s ease, backdrop-filter .28s ease; }
+.site-header::after { position: absolute; right: 0; bottom: 0; left: 0; width: var(--scroll-progress, 0%); height: 2px; background: var(--lime); content: ""; transition: width .08s linear; }
+.site-header.is-scrolled { background: rgba(247,245,238,.94); backdrop-filter: blur(14px); box-shadow: 0 8px 24px rgba(32,46,38,.08); }
+body.admin-bar .site-header { top: 32px; }
 .header-inner, .section-inner, .footer-inner { width: min(var(--page), calc(100% - 48px)); margin-inline: auto; }
 .header-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
 .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
@@ -75,6 +78,7 @@ button, input, textarea { font: inherit; }
 .note-dots span:nth-child(3) { background: #d99167; }
 .hero-visual { position: relative; min-height: 425px; display: grid; place-items: center; }
 .hero-sun { position: absolute; width: 335px; height: 335px; border-radius: 50%; background: #c7855c; box-shadow: 0 20px 100px rgba(0,0,0,.12); animation: sun-breathe 7s ease-in-out infinite; }
+.hero-sun, .hero-leaf, .hero-pouch, .hero-sticker { translate: var(--parallax-x, 0px) var(--parallax-y, 0px); transition: translate .38s cubic-bezier(.2,.75,.25,1); }
 .hero-leaf { position: absolute; z-index: 1; width: 150px; height: 240px; left: 5%; bottom: 4%; transform: rotate(-28deg); border: 1px solid rgba(215,229,161,.4); border-radius: 100% 0 100% 0; transform-origin: center bottom; animation: leaf-sway 6s ease-in-out infinite; }
 .hero-leaf::after { position: absolute; width: 1px; height: 100%; left: 50%; top: 0; transform: rotate(24deg); background: rgba(215,229,161,.42); content: ""; }
 .hero-pouch { position: relative; z-index: 2; width: 220px; height: 300px; padding: 17px 15px; transform: rotate(5deg); clip-path: polygon(8% 0,92% 0,100% 100%,0 100%); background: #f0dfbd; color: var(--green); box-shadow: 0 30px 50px rgba(0,0,0,.18); animation: pouch-float 5s ease-in-out infinite; }
@@ -158,7 +162,9 @@ html.motion-ready [data-reveal].is-visible { opacity: 1; transform: translate3d(
 .story-inner { width: min(var(--page), calc(100% - 48px)); margin-inline: auto; display: grid; grid-template-columns: .95fr 1.05fr; align-items: center; gap: 80px; }
 .story-art { position: relative; min-height: 445px; display: grid; place-items: center; background: #d2dcca; }
 .story-art::before { width: 270px; height: 270px; border: 1px solid rgba(23,62,50,.45); border-radius: 50%; box-shadow: 0 0 0 29px rgba(23,62,50,.06), 0 0 0 58px rgba(23,62,50,.04); content: ""; }
+.story-art::before { animation: story-rings 12s ease-in-out infinite; }
 .story-bag { position: absolute; width: 190px; height: 247px; display: grid; place-items: center; transform: rotate(8deg); background: #9a6548; color: #f4e4c5; clip-path: polygon(8% 0,92% 0,100% 100%,0 100%); box-shadow: 0 25px 45px rgba(32,46,38,.18); }
+.story-bag { animation: story-bag-float 5.5s ease-in-out infinite; }
 .story-bag::before { position: absolute; top: 11px; right: 10%; left: 10%; height: 6px; border-block: 1px solid rgba(255,255,255,.45); content: ""; }
 .story-bag-inner { width: 125px; padding: 15px 8px; border: 1px solid rgba(244,228,197,.62); text-align: center; }
 .story-bag-inner span { display: block; font-size: 8px; letter-spacing: .2em; text-transform: uppercase; }
@@ -185,7 +191,7 @@ html.motion-ready [data-reveal].is-visible { opacity: 1; transform: translate3d(
 .brew-card { position: relative; min-height: 390px; overflow: hidden; padding: 36px; background: var(--green); color: white; }
 .brew-card::before { position: absolute; width: 290px; height: 290px; top: -110px; right: -65px; border: 1px solid rgba(215,229,161,.35); border-radius: 50%; box-shadow: 0 0 0 35px rgba(215,229,161,.06), 0 0 0 75px rgba(215,229,161,.04); content: ""; }
 .brew-card-label { position: relative; z-index: 1; color: var(--lime); font-size: 10px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
-.brew-cup { position: absolute; width: 215px; height: 160px; right: 16%; bottom: 22%; border: 8px solid #e6d6b4; border-top: 0; border-radius: 8px 8px 52px 52px; background: #926044; box-shadow: inset 0 10px 0 rgba(255,255,255,.08), 0 20px 32px rgba(0,0,0,.2); }
+.brew-cup { position: absolute; width: 215px; height: 160px; right: 16%; bottom: 22%; border: 8px solid #e6d6b4; border-top: 0; border-radius: 8px 8px 52px 52px; background: #926044; box-shadow: inset 0 10px 0 rgba(255,255,255,.08), 0 20px 32px rgba(0,0,0,.2); translate: 0 0; animation: cup-float 5s ease-in-out infinite; }
 .brew-cup::before { position: absolute; width: 74px; height: 72px; top: 21px; right: -65px; border: 8px solid #e6d6b4; border-left: 0; border-radius: 0 50% 50% 0; content: ""; }
 .brew-cup::after { position: absolute; width: 235px; height: 14px; top: -8px; left: -18px; border-radius: 50%; background: #e6d6b4; content: ""; }
 .brew-steam { position: absolute; z-index: 1; width: 30px; height: 80px; top: -85px; left: 29%; border-left: 2px solid rgba(255,255,255,.58); border-radius: 50%; transform: rotate(15deg); animation: steam-rise 2.8s ease-in-out infinite; }
@@ -222,6 +228,10 @@ html.motion-ready [data-reveal].is-visible { opacity: 1; transform: translate3d(
 .not-found { min-height: 56vh; display: grid; place-items: center; padding: 50px 24px; text-align: center; }
 .not-found h1 { font: 400 52px var(--serif); }
 
+@keyframes story-rings { 0%, 100% { scale: 1; opacity: .9; } 50% { scale: 1.045; opacity: .58; } }
+@keyframes story-bag-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@keyframes cup-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr .8fr; gap: 20px; }
   .hero-visual { transform: scale(.86); transform-origin: center right; }
@@ -230,6 +240,8 @@ html.motion-ready [data-reveal].is-visible { opacity: 1; transform: translate3d(
   .product-art { min-height: 250px; }
 }
 @media (max-width: 700px) {
+  html { scroll-padding-top: 76px; }
+  body.admin-bar .site-header { top: 46px; }
   .header-inner, .section-inner, .footer-inner, .hero-inner, .trust-inner, .story-inner, .brew-inner, .contact-inner { width: min(100% - 36px, var(--page)); }
   .header-inner { min-height: 72px; }
   .main-nav { gap: 15px; }
@@ -286,4 +298,5 @@ html.motion-ready [data-reveal].is-visible { opacity: 1; transform: translate3d(
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .site-header::after { transition: none !important; }
 }
