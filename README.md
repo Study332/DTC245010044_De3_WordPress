@@ -11,7 +11,7 @@ cd Bai_lam_De3_WordPress
 cp .env.example .env
 ```
 
-Mở `.env`, thay các mật khẩu mẫu bằng mật khẩu riêng trước khi chạy. Sau đó tạo chứng chỉ HTTPS dùng riêng cho localhost và khởi động:
+Thông tin đăng nhập demo local mặc định là `admin` / `admin123@` cho WordPress, phpMyAdmin và Grafana. MySQL root dùng tên `root` và mật khẩu `admin123@`; tài khoản exporter nội bộ giữ tên `exporter`. Đây là thông tin công khai trong repository, chỉ dùng cho bài tập trên máy local; không mở stack ra Internet. Sau đó tạo chứng chỉ HTTPS dùng riêng cho localhost và khởi động:
 
 ```bash
 ./scripts/generate-dev-cert.sh
@@ -20,7 +20,7 @@ docker compose up -d
 docker compose ps
 ```
 
-Chờ dịch vụ `wordpress-init` hoàn tất khởi tạo ở lần chạy đầu. Tài khoản quản trị WordPress và Grafana được đặt trong `.env`.
+Chờ dịch vụ `wordpress-init` hoàn tất khởi tạo ở lần chạy đầu. Các mật khẩu được đọc từ `.env`.
 
 | Dịch vụ | Địa chỉ |
 |---|---|

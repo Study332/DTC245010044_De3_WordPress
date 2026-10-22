@@ -53,13 +53,13 @@ Các mạng Compose tách luồng truy cập: `frontend_net` nối proxy với �
 
 ## Cài đặt trên máy chạy Docker
 
-Yêu cầu Docker Engine và Docker Compose v2. Trên máy mới, tạo file cấu hình bí mật và thay toàn bộ giá trị mật khẩu mẫu bằng các mật khẩu khác nhau, dài và ngẫu nhiên:
+Yêu cầu Docker Engine và Docker Compose v2. Trên máy mới, tạo file cấu hình local:
 
 ```bash
 cp .env.example .env
 ```
 
-Có thể sinh chuỗi mật khẩu ngẫu nhiên dạng hex bằng `openssl rand -hex 24`, sau đó dán riêng một chuỗi cho từng biến trong `.env`. Mật khẩu `MYSQL_EXPORTER_PASSWORD` nên giữ dạng chữ/số hex để tránh ký tự nháy đơn trong câu lệnh khởi tạo SQL. `.env` đã được loại khỏi Git.
+Mặc định cho bài tập local: WordPress, phpMyAdmin và Grafana dùng tài khoản `admin` với mật khẩu `admin123@`. MySQL root dùng mật khẩu `admin123@`; MySQL exporter giữ tên dịch vụ `exporter` và cùng mật khẩu. Prometheus và Loki không có màn hình đăng nhập trong cấu hình này. Các thông tin này nằm trong `.env.example` công khai, chỉ dùng cho demo local; không mở stack ra Internet. `.env` thật đã được loại khỏi Git.
 
 Repository không chứa chứng chỉ hoặc khóa riêng. Mỗi lần clone mới, hãy tạo chứng chỉ self-signed dành riêng cho `localhost` và `127.0.0.1` trước khi khởi động:
 
@@ -115,7 +115,7 @@ Log giữ theo chính sách JSON log của Docker (tối đa 3 file, 10 MB mỗi
 ## Bảo mật và vận hành
 
 - Nginx dùng image unprivileged; Prometheus và Grafana cấu hình chạy với UID không phải root. MySQL/WordPress dùng entrypoint của image chính thức và hạ quyền cho tiến trình ứng dụng sau bước khởi tạo. Promtail chạy root để đọc file log Docker trên host; cAdvisor cần quyền host/cgroup để quan sát container.
-- Mật khẩu thật đặt trong `.env`, không commit file này. MySQL không mở cổng host; WordPress dùng user ứng dụng riêng; exporter dùng tài khoản `exporter` chỉ có quyền đọc số liệu cần thiết.
+- `.env` thật bị loại khỏi Git; tuy nhiên mật khẩu demo trong `.env.example` là công khai. Chỉ dùng thông tin đăng nhập mặc định trên máy local. MySQL không mở cổng host; WordPress dùng user ứng dụng riêng; exporter dùng tài khoản `exporter` chỉ có quyền đọc số liệu cần thiết.
 - `backend_net` là mạng nội bộ; cổng giám sát riêng không public; PHPMyAdmin, Prometheus và Grafana bind mặc định vào `127.0.0.1`.
 - CPU, RAM và số PID được giới hạn theo dịch vụ; container log được xoay vòng để tránh tăng vô hạn.
 - Self-signed TLS mã hóa kết nối nhưng không tạo xác thực CA tin cậy. Khi triển khai công khai, thay chứng chỉ bằng chứng chỉ hợp lệ, đặt `SITE_URL` theo domain và sửa `server_name` trong `nginx/nginx.conf`.
