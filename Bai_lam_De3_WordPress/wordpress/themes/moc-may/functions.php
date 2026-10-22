@@ -15,7 +15,8 @@ function moc_may_setup() {
 add_action('after_setup_theme', 'moc_may_setup');
 
 function moc_may_assets() {
-    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.0.0');
+    wp_enqueue_style('moc-may-style', get_stylesheet_uri(), array(), '1.1.0');
+    wp_enqueue_script('moc-may-motion', get_template_directory_uri() . '/assets/js/motion.js', array(), '1.1.0', true);
 }
 add_action('wp_enqueue_scripts', 'moc_may_assets');
 

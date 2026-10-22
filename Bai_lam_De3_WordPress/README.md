@@ -44,7 +44,7 @@ Các mạng Compose tách luồng truy cập: `frontend_net` nối proxy với �
 ## Thành phần chính
 
 - `docker-compose.yml` — dịch vụ, mạng tách biệt, volume dữ liệu, giới hạn tài nguyên và logging.
-- `wordpress/themes/moc-may/` — giao diện responsive tiếng Việt và loại nội dung sản phẩm có thể quản trị trong WordPress.
+- `wordpress/themes/moc-may/` — giao diện responsive tiếng Việt, chuyển động nhẹ khi mở trang/cuộn/di chuột, hỗ trợ cài đặt giảm chuyển động và quản trị sản phẩm trong WordPress.
 - `wordpress/init-site.sh` — cài WordPress, kích hoạt giao diện, đặt múi giờ/permalink và tạo sản phẩm mẫu ở lần đầu.
 - `mysql/init/10-create-exporter-user.sh` — tạo người dùng chỉ đọc số liệu cho MySQL exporter khi khởi tạo volume CSDL mới.
 - `nginx/` — reverse proxy HTTPS, security headers, chứng chỉ minh họa và endpoint `stub_status` chỉ dùng trong mạng Docker.
