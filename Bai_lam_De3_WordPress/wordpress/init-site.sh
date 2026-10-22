@@ -11,7 +11,22 @@ done
 mkdir -p "$WP_PATH/wp-content/themes/moc-may"
 cp -R /usr/local/share/moc-may/. "$WP_PATH/wp-content/themes/moc-may/"
 
-until wp db check --path="$WP_PATH" >/dev/null 2>&1; do
+# WP-CLI's `wp db check` calls an external mariadb-check binary, which may
+# reject MySQL 8's caching_sha2_password/self-signed local TLS certificate.
+# Probe with PHP's mysqli driver, the same driver WordPress uses at runtime.
+until php -r '
+$parts = explode(":", getenv("WORDPRESS_DB_HOST") ?: "db:3306", 2);
+$port = isset($parts[1]) ? (int) $parts[1] : 3306;
+$db = mysqli_init();
+exit(@mysqli_real_connect(
+    $db,
+    $parts[0],
+    getenv("WORDPRESS_DB_USER"),
+    getenv("WORDPRESS_DB_PASSWORD"),
+    getenv("WORDPRESS_DB_NAME"),
+    $port
+) ? 0 : 1);
+' >/dev/null 2>&1; do
     sleep 3
 done
 
