@@ -137,4 +137,13 @@ Lưu ảnh vào thư mục `minh-chung/` và thay phần ghi chú minh chứng t
 
 ## GitHub và lịch sử commit
 
-Repository được publish tại https://github.com/Study332/DTC245010044_De3_WordPress, nhánh `master`. Mẫu `.env.example` chứa mật khẩu demo công khai chỉ dành cho local; file `.env` thật, dữ liệu trong volumes và ảnh chụp có chứa mật khẩu không được commit.
+Repository được publish tại [Study332/DTC245010044_De3_WordPress](https://github.com/Study332/DTC245010044_De3_WordPress), nhánh `master`. Mẫu `.env.example` chứa mật khẩu demo công khai chỉ dành cho local; file `.env` thật, dữ liệu trong volumes và ảnh chụp có chứa mật khẩu không được commit.
+
+Khi cập nhật dự án, dùng các lệnh sau trong thư mục repository:
+
+```bash
+git status
+git add <đường-dẫn-tệp-đã-sửa>
+git commit -m "Mô tả thay đổi"
+git push
+```

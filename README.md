@@ -3,6 +3,8 @@
 **Môn học:** Triển khai và Quản trị Hệ thống Phần mềm  
 **Sinh viên:** Quách Minh Hiếu · **MSSV:** DTC245010044 · **Email:** dtc245010044@ictu.edu.vn
 
+Bản bài làm và báo cáo cũng nằm trong thư mục `Bai_lam_De3_WordPress/`.
+
 ## Mục tiêu và sản phẩm
 
 Triển khai website WordPress tiếng Việt giới thiệu thương hiệu cà phê đặc sản Việt Nam **Nương**. Trang chủ có nội dung thương hiệu, danh mục sản phẩm, câu chuyện nguồn gốc, hướng dẫn pha và liên hệ. Sản phẩm là loại nội dung riêng trong WordPress, có thể tạo và sửa từ trang quản trị; mỗi sản phẩm lưu giá, vùng trồng, hương vị và nhãn nổi bật. Ba sản phẩm mẫu được tạo tự động ở lần cài đặt đầu.
