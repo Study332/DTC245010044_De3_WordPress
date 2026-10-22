@@ -7,7 +7,7 @@ $brand_name = get_bloginfo('name') ?: 'Trà Thái Nguyên';
 <footer class="site-footer">
     <div class="footer-inner">
         <a class="brand" href="<?php echo esc_url(home_url('/')); ?>">
-            <span class="brand-mark" aria-hidden="true">T</span>
+            <span class="brand-mark" aria-hidden="true"></span>
             <span><span class="brand-name"><?php echo esc_html($brand_name); ?></span><span class="brand-caption">Chè từ Thái Nguyên</span></span>
         </a>
         <div class="footer-copy">
