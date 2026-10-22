@@ -1,0 +1,70 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: wp_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: StrongUserPass@2026!
+      MYSQL_ROOT_PASSWORD: StrongRootPass@2026!
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend_net
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wp_app
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress_db
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: StrongUserPass@2026!
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - frontend_net
+      - backend_net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wp_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - frontend_net
+      - backend_net
+
+  nginx:
+    image: nginxinc/nginx-unprivileged:alpine
+    container_name: wp_nginx
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - frontend_net
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  frontend_net:
+  backend_net:
+    internal: true
