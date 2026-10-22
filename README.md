@@ -1,30 +1,42 @@
-# ĐỀ TÀI THỰC HÀNH: ĐỀ 3 - WEBSITE QUẢNG BÁ SẢN PHẨM (WORDPRESS)
-**Môn học:** Triển khai và Quản trị Hệ thống Phần mềm
+# Đề 3 — Website quảng bá sản phẩm bằng WordPress
 
-## Thông tin sinh viên thực hiện
-- **Họ và tên:** Quách Minh Hiếu
-- **Mã số sinh viên:** DTC245010044
-- **Email:** dtc245010044@ictu.edu.vn
+Repository: [Study332/DTC245010044_De3_WordPress](https://github.com/Study332/DTC245010044_De3_WordPress). Bài làm và cấu hình chạy đầy đủ nằm trong thư mục `Bai_lam_De3_WordPress/`.
 
-## Kiến trúc hệ thống (Docker Compose Stack)
-- **Ứng dụng & CSDL:** WordPress + MySQL 8.0 + phpMyAdmin
-- **Reverse Proxy & Bảo mật:** Nginx (Unprivileged Non-root, HTTPS Self-Signed SSL, Security Headers)
-- **Giám sát (Monitoring):** Prometheus + Grafana + cAdvisor + Node Exporter
-- **Quản lý Log (Logging):** Grafana Loki + Promtail (Truy vấn qua LogQL)
+## Chạy trên máy local
 
-## Hướng dẫn cài đặt và khởi chạy
-1. Clone repository về máy:
-   git clone https://github.com/study332/DTC245010044_De3_WordPress.git
-   cd DTC245010044_De3_WordPress
+Yêu cầu Docker Engine, Docker Compose v2 và OpenSSL. Chạy các lệnh:
 
-2. Khởi chạy toàn bộ dịch vụ bằng Docker Compose:
-   docker compose up -d
+```bash
+cd Bai_lam_De3_WordPress
+cp .env.example .env
+```
 
-3. Kiểm tra trạng thái các container:
-   docker compose ps
+Mở `.env`, thay các mật khẩu mẫu bằng mật khẩu riêng trước khi chạy. Sau đó tạo chứng chỉ HTTPS dùng riêng cho localhost và khởi động:
 
-## Danh sách cổng dịch vụ (Endpoints)
-- **Website WordPress (HTTPS):** https://localhost
-- **Quản trị CSDL (phpMyAdmin):** http://localhost:8081
-- **Prometheus Metrics:** http://localhost:9090
-- **Grafana Dashboard & LogQL:** http://localhost:3000
+```bash
+./scripts/generate-dev-cert.sh
+docker compose pull
+docker compose up -d
+docker compose ps
+```
+
+Chờ dịch vụ `wordpress-init` hoàn tất khởi tạo ở lần chạy đầu. Tài khoản quản trị WordPress và Grafana được đặt trong `.env`.
+
+| Dịch vụ | Địa chỉ |
+|---|---|
+| Website WordPress | https://localhost |
+| Quản trị WordPress | https://localhost/wp-admin |
+| phpMyAdmin | http://127.0.0.1:8081 |
+| Prometheus | http://127.0.0.1:9090 |
+| Grafana | http://127.0.0.1:3000 |
+
+Trình duyệt sẽ cảnh báo vì chứng chỉ self-signed chỉ dành cho localhost. Không dùng chứng chỉ này trên website công khai. Đọc [`Bai_lam_De3_WordPress/README.md`](Bai_lam_De3_WordPress/README.md) để xem kiến trúc, bảo mật, giám sát, LogQL và hướng dẫn xử lý lỗi.
+
+## Dừng hệ thống
+
+```bash
+cd Bai_lam_De3_WordPress
+docker compose down
+```
+
+Lệnh trên giữ lại dữ liệu. `docker compose down -v` sẽ xóa dữ liệu WordPress, MySQL, Grafana, Prometheus và Loki.

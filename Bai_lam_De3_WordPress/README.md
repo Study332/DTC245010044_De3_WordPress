@@ -61,7 +61,7 @@ cp .env.example .env
 
 Có thể sinh chuỗi mật khẩu ngẫu nhiên dạng hex bằng `openssl rand -hex 24`, sau đó dán riêng một chuỗi cho từng biến trong `.env`. Mật khẩu `MYSQL_EXPORTER_PASSWORD` nên giữ dạng chữ/số hex để tránh ký tự nháy đơn trong câu lệnh khởi tạo SQL. `.env` đã được loại khỏi Git.
 
-Chứng chỉ hiện tại dùng cho demo tại `localhost` và `127.0.0.1`. Nếu cần tạo lại chứng chỉ cho máy local:
+Repository không chứa chứng chỉ hoặc khóa riêng. Mỗi lần clone mới, hãy tạo chứng chỉ self-signed dành riêng cho `localhost` và `127.0.0.1` trước khi khởi động:
 
 ```bash
 ./scripts/generate-dev-cert.sh
@@ -137,4 +137,13 @@ Lưu ảnh vào thư mục `minh-chung/` và thay phần ghi chú minh chứng t
 
 ## GitHub và lịch sử commit
 
-Thư mục bài làm nằm trong repository Git của dự án. Lịch sử hiện có ba commit theo các mốc: WordPress/MySQL và reverse proxy; Prometheus/Grafana; Loki/Promtail và hardening. Gói trong thư mục này được thêm thành commit riêng. Repository chưa có remote GitHub; trước khi nộp, tạo repository theo yêu cầu của giảng viên, thêm remote và push nhánh dự án. Không thêm `.env`, khóa TLS, dữ liệu trong volumes hoặc ảnh chụp có chứa mật khẩu.
+Repository được xuất bản tại [Study332/DTC245010044_De3_WordPress](https://github.com/Study332/DTC245010044_De3_WordPress). Lịch sử có các commit theo mốc: WordPress/MySQL và reverse proxy; Prometheus/Grafana; Loki/Promtail và hardening; hoàn thiện và sửa lỗi khởi động. Khi làm việc trên bản clone từ GitHub, lưu thay đổi bằng:
+
+```bash
+git status
+git add <đường-dẫn-tệp-đã-sửa>
+git commit -m "Mô tả thay đổi"
+git push
+```
+
+Không thêm `.env`, khóa TLS, dữ liệu trong volumes hoặc ảnh chụp có chứa mật khẩu vào Git.
