@@ -1,6 +1,0 @@
-db_data/
-wp_data/
-grafana_data/
-loki_data/
-.env
-!.env.example
